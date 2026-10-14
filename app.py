@@ -159,9 +159,9 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 # CACHED LOADERS & HELPERS
 # ==============================================================================
 @st.cache_resource
-def get_predictor() -> Optional[BotPredictor]:
+def get_predictor(model_name: str = "best_model") -> Optional[BotPredictor]:
     try:
-        return BotPredictor(model_name="best_model")
+        return BotPredictor(model_name=model_name)
     except Exception:
         return None
 
@@ -319,6 +319,17 @@ with st.sidebar:
 
     st.markdown("---")
 
+    model_choice = st.selectbox(
+        "🧠 Classifier Engine",
+        ["XGBoost (Champion)", "Random Forest"],
+        index=0,
+        help="Select which trained ML algorithm performs live inference across the app.",
+    )
+    active_model_name = "xgboost" if "XGBoost" in model_choice else "random_forest"
+    predictor = get_predictor(active_model_name)
+
+    st.markdown("<div style='height:4px;'></div>", unsafe_allow_html=True)
+
     if config:
         total_counts = config.get("total_dataset_counts", {})
         total_sess = total_counts.get("total", 67642)
@@ -326,13 +337,14 @@ with st.sidebar:
         zenodo_sess = total_counts.get("web_robot_detection", 67352)
         train_sess = config.get("training_counts", {}).get("total", 54110)
         test_sess = config.get("test_counts", {}).get("total", 13532)
+        display_model_name = "XGBoost" if active_model_name == "xgboost" else "Random Forest"
 
         st.markdown(
             f"""
             <div style="background:#1e293b; padding:12px 14px; border-radius:8px; border:1px solid #334155; font-size:12px;">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                    <span style="color:#10b981; font-weight:700;">● AI Model Online</span>
-                    <span style="font-size:11px; color:#38bdf8; background:#0f172a; padding:1px 6px; border-radius:4px; border:1px solid #1e293b; font-weight:600;">{config.get('best_model_name', 'XGBoost')}</span>
+                    <span style="color:#10b981; font-weight:700;">● Model Active</span>
+                    <span style="font-size:11px; color:#38bdf8; background:#0f172a; padding:1px 6px; border-radius:4px; border:1px solid #1e293b; font-weight:600;">{display_model_name}</span>
                 </div>
                 <div style="color:#f8fafc; font-size:13px; font-weight:700;">
                     Unified Dataset: <span style="color:#38bdf8;">{total_sess:,} sessions</span>
@@ -1043,17 +1055,127 @@ elif page == "📊 Dashboard & Metrics":
         st.plotly_chart(fig_comp, use_container_width=True)
         st.markdown("</div>", unsafe_allow_html=True)
 
+    st.markdown("<div style='height:16px;'></div>", unsafe_allow_html=True)
+
+    # 1. Side-by-Side Comparison Table
+    st.markdown(
+        """
+        <div class="cyber-card">
+            <h3 style="font-size:18px; color:#38bdf8; margin-bottom:6px;">⚖️ Side-by-Side Algorithm Benchmark (13,532 Unseen Sessions)</h3>
+            <p style="font-size:13px; color:#94a3b8; margin-bottom:14px;">
+                Both algorithms were trained on the exact same 54,110 combined observations and benchmarked on identical held-out test splits.
+            </p>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    comp_df = pd.DataFrame([
+        {
+            "Performance Metric": "Overall Accuracy",
+            "Random Forest": f"{rf_eval['accuracy']*100:.2f}%",
+            "XGBoost (Champion)": f"{champ_eval['accuracy']*100:.2f}%",
+            "Defense Rationale": "🏆 XGBoost (+0.10% superior accuracy)",
+        },
+        {
+            "Performance Metric": "Macro-F1 Score",
+            "Random Forest": f"{rf_eval['macro_f1']:.4f}",
+            "XGBoost (Champion)": f"{champ_eval['macro_f1']:.4f}",
+            "Defense Rationale": "🏆 XGBoost (better minority bot class balance)",
+        },
+        {
+            "Performance Metric": "Weighted-F1 Score",
+            "Random Forest": f"{rf_eval['weighted_f1']:.4f}",
+            "XGBoost (Champion)": f"{champ_eval['weighted_f1']:.4f}",
+            "Defense Rationale": "🏆 XGBoost",
+        },
+        {
+            "Performance Metric": "Bot Catch Rate (Recall)",
+            "Random Forest": f"{rf_eval['per_class']['robot']['recall']*100:.2f}%",
+            "XGBoost (Champion)": f"{champ_eval['per_class']['robot']['recall']*100:.2f}%",
+            "Defense Rationale": "Random Forest catches slightly more raw bots",
+        },
+        {
+            "Performance Metric": "Bot Precision (Low False Alarms)",
+            "Random Forest": f"{rf_eval['per_class']['robot']['precision']*100:.2f}%",
+            "XGBoost (Champion)": f"{champ_eval['per_class']['robot']['precision']*100:.2f}%",
+            "Defense Rationale": "🏆 XGBoost (fewer legitimate visitors flagged)",
+        },
+        {
+            "Performance Metric": "Human Precision",
+            "Random Forest": f"{rf_eval['per_class']['human']['precision']*100:.2f}%",
+            "XGBoost (Champion)": f"{champ_eval['per_class']['human']['precision']*100:.2f}%",
+            "Defense Rationale": "Both models preserve >99% genuine human trust",
+        },
+        {
+            "Performance Metric": "ROC-AUC Score",
+            "Random Forest": f"{rf_eval['roc_auc']:.4f}",
+            "XGBoost (Champion)": f"{champ_eval['roc_auc']:.4f}",
+            "Defense Rationale": "🏆 XGBoost (0.9912 vs 0.9903)",
+        },
+        {
+            "Performance Metric": "Inference Latency (Mean)",
+            "Random Forest": f"{eval_report['models']['random_forest']['latency']['mean_ms']:.2f} ms",
+            "XGBoost (Champion)": f"{eval_report['models']['xgboost']['latency']['mean_ms']:.2f} ms",
+            "Defense Rationale": "🚀 XGBoost is 41.8× faster for inline prevention",
+        },
+        {
+            "Performance Metric": "Training Time",
+            "Random Forest": f"{eval_report['models']['random_forest']['training_time_seconds']:.2f} s",
+            "XGBoost (Champion)": f"{eval_report['models']['xgboost']['training_time_seconds']:.2f} s",
+            "Defense Rationale": "🏆 XGBoost trains 2.9× faster",
+        },
+        {
+            "Performance Metric": "Model Disk Size",
+            "Random Forest": "15.06 MB",
+            "XGBoost (Champion)": "0.40 MB",
+            "Defense Rationale": "🏆 XGBoost is 37× lighter for edge firewalls",
+        },
+    ])
+    st.table(comp_df)
+
+    # 2. Champion Rationale Card
+    st.markdown(
+        """
+        <div class="cyber-card" style="border-left: 4px solid #06b6d4; margin-top:14px; margin-bottom:16px;">
+            <h4 style="color:#38bdf8; font-size:16px; margin-bottom:8px;">🎓 Why Faculty Viva Defends XGBoost as Champion:</h4>
+            <div style="font-size:13px; color:#cbd5e1; line-height:1.6;">
+                1. <b>In-Flight Web Firewall Latency (1.73 ms vs 72.43 ms):</b> In an active reverse proxy or API gateway, adding 72 ms introduces perceptible delay to legitimate web visitors. XGBoost evaluates sessions in <b>1.73 ms</b> (41.8× faster), making real-time inline edge blocking feasible without human friction.<br>
+                2. <b>Iterative Gradient Boosting on Imbalanced Traffic:</b> With legitimate traffic outnumbering bot sessions ~4:1, XGBoost iteratively focuses tree splits on the residual loss of subtle, sophisticated bot sessions.<br>
+                3. <b>Edge Proxy Footprint (0.4 MB vs 15.1 MB):</b> Fits directly inside memory-constrained Nginx Lua modules and Cloudflare edge workers with zero cache overhead.
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    # 3. Source-Wise Generalization Audit (Both Models)
     st.markdown("<div class='cyber-card'>", unsafe_allow_html=True)
-    st.markdown("<h3 style='font-size:16px; margin-bottom:8px;'>🌐 Multi-Dataset Generalization Audit</h3>", unsafe_allow_html=True)
+    st.markdown("<h3 style='font-size:16px; margin-bottom:8px;'>🌐 Multi-Dataset Generalization Audit (Both Models Tested on Both Sources)</h3>", unsafe_allow_html=True)
+    st.markdown("<p style='font-size:13px; color:#94a3b8; margin-bottom:12px;'>Evaluation on held-out unseen records from each source independently proves that neither dataset was memorized or neglected.</p>", unsafe_allow_html=True)
+    
     sw_data = []
+    # XGBoost rows
     for src, info in eval_report["models"]["xgboost"]["source_wise"].items():
         sw_data.append({
+            "Model": "XGBoost (Champion)",
             "Dataset Source": "M4D User Study & Logs" if "M4D" in src else "Web Robot Detection Server Logs",
-            "Unseen Test Sessions": f"{info['sample_count']:,}",
+            "Unseen Sessions": f"{info['sample_count']:,}",
             "Accuracy": f"{info['accuracy']*100:.2f}%",
             "Macro-F1": f"{info['macro_f1']:.4f}",
-            "Bot Catch Rate (Recall)": f"{info['per_class']['robot']['recall']*100:.2f}%",
-            "Human Detection F1": f"{info['per_class']['human']['f1']:.4f}",
+            "Bot Recall": f"{info['per_class']['robot']['recall']*100:.2f}%",
+            "Human F1": f"{info['per_class']['human']['f1']:.4f}",
+        })
+    # Random Forest rows
+    for src, info in eval_report["models"]["random_forest"]["source_wise"].items():
+        sw_data.append({
+            "Model": "Random Forest",
+            "Dataset Source": "M4D User Study & Logs" if "M4D" in src else "Web Robot Detection Server Logs",
+            "Unseen Sessions": f"{info['sample_count']:,}",
+            "Accuracy": f"{info['accuracy']*100:.2f}%",
+            "Macro-F1": f"{info['macro_f1']:.4f}",
+            "Bot Recall": f"{info['per_class']['robot']['recall']*100:.2f}%",
+            "Human F1": f"{info['per_class']['human']['f1']:.4f}",
         })
     st.dataframe(pd.DataFrame(sw_data), use_container_width=True)
     st.markdown("</div>", unsafe_allow_html=True)
