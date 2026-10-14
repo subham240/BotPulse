@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+.venv/
+venv/
+ENV/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Testing & Coverage
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Streamlit
+.streamlit/
+
+# OS specific
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Raw datasets & logs (exceeds GitHub 100MB limit; processed artifacts are committed)
+data/raw/
+
+# Temporary scratch files
+scratch/
+tmp/

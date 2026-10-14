@@ -1,0 +1,68 @@
+{
+  "best_model_name": "XGBoost",
+  "features": [
+    "NUMBER_OF_REQUESTS",
+    "TOTAL_DURATION",
+    "AVERAGE_TIME",
+    "STANDARD_DEVIATION",
+    "REPEATED_REQUESTS",
+    "HTTP_RESPONSE_2XX",
+    "HTTP_RESPONSE_3XX",
+    "HTTP_RESPONSE_4XX",
+    "HTTP_RESPONSE_5XX",
+    "GET_METHOD",
+    "POST_METHOD",
+    "HEAD_METHOD",
+    "OTHER_METHOD",
+    "NIGHT",
+    "IMAGES",
+    "TOTAL_HTML",
+    "HTML_TO_IMAGE",
+    "HTML_TO_CSS",
+    "HTML_TO_JS",
+    "WIDTH",
+    "DEPTH",
+    "STD_DEPTH",
+    "CONSECUTIVE",
+    "DATA",
+    "SF_REFERRER",
+    "SF_FILETYPE",
+    "MAX_BARRAGE"
+  ],
+  "n_features": 27,
+  "target_column": "ROBOT",
+  "class_mapping": {
+    "0": "Human (Non-Robot)",
+    "1": "Web Robot (Bot)"
+  },
+  "total_dataset_counts": {
+    "total": 67642,
+    "m4d": 290,
+    "web_robot_detection": 67352,
+    "humans": 53964,
+    "bots": 13678,
+    "m4d_raw_requests": 305377
+  },
+  "training_counts": {
+    "total": 54110,
+    "m4d": 229,
+    "web_robot_detection": 53881
+  },
+  "test_counts": {
+    "total": 13532,
+    "m4d": 61,
+    "web_robot_detection": 13471
+  },
+  "evaluation_summary": {
+    "random_forest": {
+      "accuracy": 0.9255099024534437,
+      "macro_f1": 0.8963438171539251,
+      "latency_mean_ms": 72.42727699987881
+    },
+    "xgboost": {
+      "accuracy": 0.9265444871415903,
+      "macro_f1": 0.8970843679367391,
+      "latency_mean_ms": 1.7346329999054433
+    }
+  }
+}

@@ -1,0 +1,97 @@
+{
+  "audit_timestamp": "2026-10-14T13:43:20.302609",
+  "common_features": [
+    "NUMBER_OF_REQUESTS",
+    "TOTAL_DURATION",
+    "AVERAGE_TIME",
+    "STANDARD_DEVIATION",
+    "REPEATED_REQUESTS",
+    "HTTP_RESPONSE_2XX",
+    "HTTP_RESPONSE_3XX",
+    "HTTP_RESPONSE_4XX",
+    "HTTP_RESPONSE_5XX",
+    "GET_METHOD",
+    "POST_METHOD",
+    "HEAD_METHOD",
+    "OTHER_METHOD",
+    "NIGHT",
+    "IMAGES",
+    "TOTAL_HTML",
+    "HTML_TO_IMAGE",
+    "HTML_TO_CSS",
+    "HTML_TO_JS",
+    "WIDTH",
+    "DEPTH",
+    "STD_DEPTH",
+    "CONSECUTIVE",
+    "DATA",
+    "SF_REFERRER",
+    "SF_FILETYPE",
+    "MAX_BARRAGE"
+  ],
+  "target_column": "ROBOT",
+  "web_robot_detection": {
+    "file": "C:\\Users\\lenovo\\.gemini\\antigravity\\scratch\\BotPulse_Final\\data\\raw\\web_robot_detection\\simple_features.csv",
+    "shape": [
+      67352,
+      32
+    ],
+    "target_distribution": {
+      "0": 53858,
+      "1": 13494
+    },
+    "missing_values": {
+      "STANDARD_DEVIATION": 14407,
+      "SF_REFERRER": 14407,
+      "SF_FILETYPE": 14407
+    },
+    "leakage_audit": {
+      "penalty_column_detected": true,
+      "penalty_action": "Strictly excluded from predictive feature matrix",
+      "id_column_detected": true,
+      "id_action": "Excluded to prevent identifier memorization"
+    },
+    "semantic_supplementary": {
+      "path": "C:\\Users\\lenovo\\.gemini\\antigravity\\scratch\\BotPulse_Final\\data\\raw\\web_robot_detection\\semantic_features.csv",
+      "shape": [
+        67352,
+        7
+      ],
+      "columns": [
+        "ID",
+        "TOTAL_TOPICS",
+        "UNIQUE_TOPICS",
+        "PAGE_SIMILARITY",
+        "PAGE_VARIANCE",
+        "BOOLEAN_PAGE_VARIANCE",
+        "ROBOT"
+      ],
+      "usage": "Supplementary feature analysis only (represents identical observations to simple_features.csv; not appended as independent rows)"
+    }
+  },
+  "m4d_dataset": {
+    "root": "C:\\Users\\lenovo\\.gemini\\antigravity\\scratch\\BotPulse_Final\\data\\raw\\m4d",
+    "total_annotated_sessions": 290,
+    "label_breakdown": {
+      "human": 106,
+      "moderate_bot": 78,
+      "advanced_bot": 106
+    },
+    "phase_breakdown": {
+      "phase1_humans_and_advanced_bots_train": 70,
+      "phase1_humans_and_moderate_bots_train": 35,
+      "phase1_humans_and_advanced_bots_test": 30,
+      "phase1_humans_and_moderate_bots_test": 15,
+      "phase2_humans_and_moderate_and_advanced_bots": 112,
+      "phase2_humans_and_advanced_bots": 28
+    },
+    "apache_log_files_count": 55,
+    "target_mapping": {
+      "human": 0,
+      "moderate_bot": 1,
+      "advanced_bot": 1,
+      "justification": "Shared binary classification task (Human vs Bot). Both moderate and advanced bots are automated user agents."
+    }
+  },
+  "compatibility_status": "COMPATIBLE: Extracted Apache session features from M4D match Web Robot Detection schema exactly."
+}

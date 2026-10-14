@@ -1,0 +1,137 @@
+{
+  "MAX_BARRAGE": {
+    "random_forest": 0.08733645512512049,
+    "xgboost": 0.5315061211585999,
+    "average": 0.30942128814186015
+  },
+  "SF_REFERRER": {
+    "random_forest": 0.13093880743137723,
+    "xgboost": 0.10293358564376831,
+    "average": 0.11693619653757277
+  },
+  "NUMBER_OF_REQUESTS": {
+    "random_forest": 0.10510665222799861,
+    "xgboost": 0.050675682723522186,
+    "average": 0.0778911674757604
+  },
+  "HTML_TO_CSS": {
+    "random_forest": 0.0406920834333434,
+    "xgboost": 0.06791750341653824,
+    "average": 0.05430479342494082
+  },
+  "DATA": {
+    "random_forest": 0.08711192396059222,
+    "xgboost": 0.013458089902997017,
+    "average": 0.05028500693179462
+  },
+  "HTML_TO_IMAGE": {
+    "random_forest": 0.06368012776228466,
+    "xgboost": 0.03172660619020462,
+    "average": 0.04770336697624464
+  },
+  "WIDTH": {
+    "random_forest": 0.07208204871381946,
+    "xgboost": 0.01703147403895855,
+    "average": 0.044556761376389004
+  },
+  "DEPTH": {
+    "random_forest": 0.07025956742590524,
+    "xgboost": 0.013311801478266716,
+    "average": 0.041785684452085976
+  },
+  "STD_DEPTH": {
+    "random_forest": 0.05929818180019011,
+    "xgboost": 0.015318484045565128,
+    "average": 0.03730833292287762
+  },
+  "TOTAL_DURATION": {
+    "random_forest": 0.04989220353388517,
+    "xgboost": 0.01440876629203558,
+    "average": 0.032150484912960374
+  },
+  "TOTAL_HTML": {
+    "random_forest": 0.04813444085084743,
+    "xgboost": 0.01599474996328354,
+    "average": 0.03206459540706548
+  },
+  "REPEATED_REQUESTS": {
+    "random_forest": 0.03142656257799699,
+    "xgboost": 0.025787832215428352,
+    "average": 0.02860719739671267
+  },
+  "AVERAGE_TIME": {
+    "random_forest": 0.042390941763457375,
+    "xgboost": 0.013143932446837425,
+    "average": 0.0277674371051474
+  },
+  "IMAGES": {
+    "random_forest": 0.03148776006970845,
+    "xgboost": 0.006597643252462149,
+    "average": 0.0190427016610853
+  },
+  "SF_FILETYPE": {
+    "random_forest": 0.023158187024785174,
+    "xgboost": 0.008310073055326939,
+    "average": 0.015734130040056055
+  },
+  "HTML_TO_JS": {
+    "random_forest": 0.009132891278195155,
+    "xgboost": 0.011322456412017345,
+    "average": 0.01022767384510625
+  },
+  "STANDARD_DEVIATION": {
+    "random_forest": 0.014268246702429377,
+    "xgboost": 0.002689340151846409,
+    "average": 0.008478793427137893
+  },
+  "HTTP_RESPONSE_4XX": {
+    "random_forest": 0.003935228444803336,
+    "xgboost": 0.012147526256740093,
+    "average": 0.008041377350771714
+  },
+  "HTTP_RESPONSE_2XX": {
+    "random_forest": 0.00432685006716067,
+    "xgboost": 0.010890492238104343,
+    "average": 0.0076086711526325065
+  },
+  "NIGHT": {
+    "random_forest": 0.004647130214960976,
+    "xgboost": 0.010340782813727856,
+    "average": 0.0074939565143444156
+  },
+  "CONSECUTIVE": {
+    "random_forest": 0.010177009194373957,
+    "xgboost": 0.0034768367186188698,
+    "average": 0.006826922956496413
+  },
+  "GET_METHOD": {
+    "random_forest": 0.004992350452098941,
+    "xgboost": 0.006279346998780966,
+    "average": 0.0056358487254399535
+  },
+  "POST_METHOD": {
+    "random_forest": 0.0037716309692198925,
+    "xgboost": 0.0054589612409472466,
+    "average": 0.00461529610508357
+  },
+  "HTTP_RESPONSE_5XX": {
+    "random_forest": 0.0002225945643959514,
+    "xgboost": 0.0044352165423333645,
+    "average": 0.002328905553364658
+  },
+  "HEAD_METHOD": {
+    "random_forest": 0.0008930318743987116,
+    "xgboost": 0.0022999311331659555,
+    "average": 0.0015964815037823336
+  },
+  "HTTP_RESPONSE_3XX": {
+    "random_forest": 0.0006352379580310103,
+    "xgboost": 0.0025367646012455225,
+    "average": 0.0015860012796382664
+  },
+  "OTHER_METHOD": {
+    "random_forest": 1.854578620039632e-06,
+    "xgboost": 0.0,
+    "average": 9.27289310019816e-07
+  }
+}
